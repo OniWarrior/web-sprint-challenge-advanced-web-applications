@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Route, Switch ,Link} from "react-router-dom";
 
 
 import Login from "./components/Login";
+import BubblePage from './components/BubblePage'
 import axios from 'axios'
 import "./styles.scss";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   
@@ -13,8 +15,7 @@ function App() {
       .then(res => {
         console.log("Logged out!");
         localStorage.removeItem('token');
-        window.location.href = "/";
-        
+        window.location.href = "/";       
         
     })
       .catch(err=>console.log(err))
@@ -28,8 +29,13 @@ function App() {
           Color Picker Sprint Challenge
           <Link  data-testid="logoutButton" onClick={logout}>logout</Link>
         </header> 
-
+        <Switch>
         <Route exact path="/" component={Login} />
+        <PrivateRoute path='/BubblePage' component={BubblePage}/>
+
+        </Switch>
+
+        
       </div>
     </Router>
   );

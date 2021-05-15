@@ -1,6 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, Component } from "react";
 import {useParams, useHistory} from 'react-router-dom'
 import axios from "axios";
+import Color from './Color'
+import EditMenu from './EditMenu'
+import { axiosWithAuth } from "../helpers/axiosWithAuth";
 
 const initialColor = {
   color: "",
@@ -10,47 +13,38 @@ const initialColor = {
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  
 
-  const {id} = useParams();
+  
   const { push } = useHistory();
-
-  useEffect(()=>{
-    axios.get(`http://localhost:5000/api/colors/${id}`)
-    .then(res =>{
-      editColor(res.data)
-    })
-    .catch(err => console.log(err))
-  },[id])
+  
 
   const editColor = color => {
     setEditing(true);
-    setColorToEdit(color);
+    setColorToEdit(color);    
   };
 
 
 
   const saveEdit = e => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/colors/${id}`,colorToEdit)
+    
+    axiosWithAuth().put(`http://localhost:5000/api/colors/${colorToEdit.id}`,colorToEdit)
     .then(res =>{
-      console.log(res.data);
-      updateColors(res.data);
-      push(`/colors/${id}`)
+      console.log(res.data);       
+      push(`/BubblePage`)
 
     })
     .catch(err =>console.log(err))
   };
 
   const deleteColor = color => {
-    axios.delete(`http://localhost:5000/api/colors/${id}`,color)
+    axiosWithAuth().delete(`http://localhost:5000/api/colors/${color.id}`,color)
     .then(res =>{
-      console.log(res);      
-      push(`/colors`)
-
+      console.log(res);              
+      push(`/BubblePage/${color.id}`)
     })
     .catch(err =>console.log(err))
-
-
   };
 
   return (
