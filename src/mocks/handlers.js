@@ -110,6 +110,8 @@ export const handlers = [
         );
     }
   }),
+  
+  
   // Handles a GET /user request
   rest.get(`${urlBase}/colors`, (req, res, ctx) => {
     if (authenticator(req)) {
@@ -123,6 +125,16 @@ export const handlers = [
         ctx.json({ error: "User must be logged in to do that." })
       )
     }
+  }),
+  rest.post(`${urlBase}/logout`, (req, res,ctx) => {
+    //remove token from database
+    return res(
+      ctx.status(200),
+      ctx.json({
+        payload: token
+      })
+    )
+    
   }),
 
   rest.post(`${urlBase}/colors`, (req, res, ctx) => {

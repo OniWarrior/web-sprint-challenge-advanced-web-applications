@@ -1,27 +1,87 @@
-import React, { useEffect } from "react";
+import React from 'react'
+import axios from 'axios'
 
-const Login = () => {
+class Login extends React.Component {
+  state={
+    credentials:{
+      username:'',
+      password:''
+    },
+    error:''
+  }
+ 
+
+  handleChange = e => {
+    this.setState({
+      credentials: {
+        ...this.state.credentials,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
+  login = e =>{
+    e.preventDefault();
 
-  useEffect(()=>{
-    // make a post request to retrieve a token from the api
-    // when you have handled the token, navigate to the BubblePage route
-  });
+    axios.post('http://localhost:5000/api/login',this.state.credentials)
+    .then(res =>{
+      console.log('successful',res.data.payload)
+      localStorage.setItem('token',res.data.payload)
+      this.props.history.push('/BubblePage')
+    })
+    .catch(err => {
+      console.log(err)      
+        this.setState({
+          ...this.state.error,
+          error: err
+        })
+      
+    })
+  } 
   
-  const error = "";
-  //replace with error state
+  
+  render(){
 
-  return (
-    <div>
-      <h1>Welcome to the Bubble App!</h1>
-      <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+    return (
+      <div>
+        <h1>Welcome to the Bubble App!</h1>
+        <div data-testid="loginForm" className="login-form">
+          <form className='form-container' onSubmit={this.login}>
+            <h2>Login</h2>
+            <div className='form-group-inputs'>
+              <label> username:
+                <input
+                data-testid='username'
+                type='text'
+                name='username'
+                value={this.state.credentials.username}
+                onChange={this.handleChange}
+                />
+              </label>
+
+              <label> password:
+                <input
+                data-testid='password'
+                type='password'
+                name='password'
+                value={this.state.credentials.password}
+                onChange={this.handleChange}
+                />
+              </label>
+             
+              <button>Log In</button>    
+               <p data-testid="errorMessage" className="error">{this.state.error}</p>         
+            </div>
+          </form>
+        </div>  
+       
       </div>
+    );
+  }
 
-      <p data-testid="errorMessage" className="error">{error}</p>
-    </div>
-  );
+  
 };
 
 export default Login;
