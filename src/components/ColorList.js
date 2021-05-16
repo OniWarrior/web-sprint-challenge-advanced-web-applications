@@ -1,5 +1,5 @@
 import React, { useState,useEffect, Component } from "react";
-import {useParams, useHistory} from 'react-router-dom'
+
 import axios from "axios";
 import Color from './Color'
 import EditMenu from './EditMenu'
@@ -16,7 +16,7 @@ const ColorList = ({ colors, updateColors }) => {
   
 
   
-  const { push } = useHistory();
+  
   
 
   const editColor = color => {
@@ -32,7 +32,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth().put(`http://localhost:5000/api/colors/${colorToEdit.id}`,colorToEdit)
     .then(res =>{
       console.log(res.data);       
-      push(`/BubblePage`)
+      this.props.history.push(`/BubblePage`)
 
     })
     .catch(err =>console.log(err))
@@ -42,7 +42,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth().delete(`http://localhost:5000/api/colors/${color.id}`,color)
     .then(res =>{
       console.log(res);              
-      push(`/BubblePage/${color.id}`)
+      this.props.history.push(`/BubblePage/${color.id}`)
     })
     .catch(err =>console.log(err))
   };

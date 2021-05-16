@@ -19,12 +19,11 @@ const BubblePage = () => {
   return (
     <div className="container">
       <ColorList colors={colorList} updateColors={setColorList} />
-      <Bubbles colors={colorList} />
+      <Bubbles data-testid='bubbles' colors={colorList} />
     </div>
   );
 };
 
 export default BubblePage;
 
-//Task List:
-//1. When the component mounts, make an axios call to retrieve all color data and push to state.
+
